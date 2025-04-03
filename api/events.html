@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Listing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 safe-area-padding">
+    <div id="events-container" class="max-w-md mx-auto space-y-4">
+        <!-- Events will be dynamically inserted here -->
+    </div>
+
+    <script>
+        // Dummy data matching database schema
+        const events = [
+            {
+                id: 1,
+                loc_id: "Main Hall",
+                event_name: "Tech Summit 2024",
+                event_date: "2024-10-15",
+                description: "Annual technology conference featuring AI, blockchain and cloud innovations.",
+                image: "https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                user_id: "admin",
+                type: "Conference",
+                status: "Active"
+            },
+            {
+                id: 2,
+                loc_id: "Room 101",
+                event_name: "Design Workshop",
+                event_date: "2024-11-05",
+                description: "Hands-on workshop for UX/UI designers to learn new Figma features.",
+                image: "https://images.pexels.com/photos/3182765/pexels-photo-3182765.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                user_id: "design_team",
+                type: "Workshop",
+                status: "Active"
+            },
+            {
+                id: 3,
+                loc_id: "Outdoor Garden",
+                event_name: "Networking Mixer",
+                event_date: "2024-09-20",
+                description: "Casual networking event with drinks and light snacks.",
+                image: "https://images.pexels.com/photos/3184183/pexels-photo-3184183.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                user_id: "events_team",
+                type: "Social",
+                status: "Active"
+            }
+        ];
+
+        function renderEvents() {
+            const container = document.getElementById('events-container');
+            
+            if (!events || events.length === 0) {
+                container.innerHTML = `
+                    <div class="p-6 text-center bg-white rounded-xl shadow-sm border border-gray-200">
+                        <i class="fas fa-calendar-times text-4xl text-gray-300 mb-3"></i>
+                        <h3 class="text-lg font-medium text-gray-700">No Upcoming Events</h3>
+                        <p class="text-gray-500 mt-1">New events will be posted soon.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = events.map(event => `
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <img src="${event.image}" alt="${event.event_name}" 
+                             class="w-full h-48 object-cover">
+                    </div>
+                    
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-semibold text-gray-800">${event.event_name}</h3>
+                            <span class="px-2 py-1 text-xs rounded-full ${event.type === 'Conference' ? 'bg-blue-100 text-blue-800' : 
+                                event.type === 'Workshop' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'}">
+                                ${event.type}
+                            </span>
+                        </div>
+                        
+                        <div class="flex items-center text-sm text-gray-500 mb-3">
+                            <i class="far fa-calendar-alt mr-1.5"></i>
+                            <span class="mr-4">${new Date(event.event_date).toLocaleDateString()}</span>
+                            <i class="fas fa-map-marker-alt mr-1.5"></i>
+                            <span>${event.loc_id}</span>
+                        </div>
+                        
+                        <p class="text-gray-600 text-sm mb-4">${event.description}</p>
+                        
+                        <button class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg 
+                                    transition duration-200 flex items-center justify-center">
+                            <i class="far fa-eye mr-2"></i>
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', renderEvents);
+    </script>
+</body>
+</html>
