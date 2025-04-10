@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Route Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 safe-area-padding">
+    <div class="max-w-md mx-auto space-y-6">
+        <!-- Route Form -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Plan Your Route</h2>
+            <form id="routeForm" class="space-y-4">
+                <div>
+                    <label for="startPoint" class="block text-sm font-medium text-gray-700 mb-1">Start Point</label>
+                    <input type="text" id="startPoint" required
+                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="endPoint" class="block text-sm font-medium text-gray-700 mb-1">End Point</label>
+                    <input type="text" id="endPoint" required
+                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <button type="submit"
+                    class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-200">
+                    <i class="fas fa-route mr-2"></i>Generate Route
+                </button>
+            </form>
+        </div>
+
+        <!-- Route Card Display -->
+        <div id="routeCard" class="hidden bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+            <div class="aspect-w-16 aspect-h-9">
+                <img id="routeImage" src="" alt="Route map" class="w-full h-48 object-cover">
+            </div>
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-lg font-semibold text-gray-800">
+                        <span id="displayStart">New York</span> 
+                        <i class="fas fa-arrow-right mx-2 text-gray-400"></i> 
+                        <span id="displayEnd">Boston</span>
+                    </h3>
+                </div>
+                <p id="routeDescription" class="text-gray-600 text-sm">
+                    Suggested route via I-95 N with estimated travel time of 4 hours.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('routeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const startPoint = document.getElementById('startPoint').value;
+            const endPoint = document.getElementById('endPoint').value;
+            
+            // Update the card with form values
+            document.getElementById('displayStart').textContent = startPoint;
+            document.getElementById('displayEnd').textContent = endPoint;
+            
+            // Generate a random map image based on locations
+            const mapImageUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(startPoint)},${encodeURIComponent(endPoint)}&zoom=10&size=600x300&maptype=roadmap&markers=color:red%7C${encodeURIComponent(startPoint)}&markers=color:blue%7C${encodeURIComponent(endPoint)}&key=YOUR_API_KEY`;
+            
+            // Using placeholder image since we don't have actual API key
+            document.getElementById('routeImage').src = 'https://images.pexels.com/photos/2670898/pexels-photo-2670898.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
+            
+            // Show description with random travel time
+            const hours = Math.floor(Math.random() * 6) + 1;
+            document.getElementById('routeDescription').textContent = 
+                `Recommended route with estimated travel time of ${hours} hour${hours > 1 ? 's' : ''}. Best for ${hours > 3 ? 'scenic' : 'fastest'} travel.`;
+            
+            // Show the card
+            document.getElementById('routeCard').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
